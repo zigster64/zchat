@@ -9,6 +9,8 @@ They managed to build a complete civilization using just cuniform even !
 Z-Chat allows you to communicate with other people using Cuniform, with the modern convenience of 
 hexidecimal, and some extra emojis for good measure.
 
+![Z-Chat](../docs/zchat.png)
+
 Click on any Cuniform (or Emoji) to transmit the data for that code.
 
 Click on any PAIR of Hexidecimal values to combine them and transmit the character for that combined code.

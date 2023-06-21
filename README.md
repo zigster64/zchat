@@ -86,7 +86,10 @@ which is an endpoint of mime type `text/event-stream`
 This is a text protocol that packages messages in the format
 ```
 event: name of event
-data: Some data. Can be anything encoded in UTF-8 - can be TEXT, can be JSON, can be protobuf encoded, etc. Whatever works for you.
+data: Some UTF-8 encoded data.
+Can be anything - can be TEXT, can be JSON 
+can be protobuf encoded if you want !
+Finish up with 2 blank lines to denote end of message.
 
  
 ```

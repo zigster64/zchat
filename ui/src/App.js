@@ -26,14 +26,17 @@ function App() {
     }
   );
 
+  // Define a component for a Button that takes some arbitrary data of different types
   const Button = (data) => {
     const displayChar = data.char ? data.char : data.emoji ? data.emoji : data.cuniform;
 
     const handleClick = async () => {
       let payload = data;
 
+      // little complexity here, because Hex buttons need 2 clicks before they transmit a char
       if (data.char) {
         if (!lastChar) {
+          // this is the first click of a Hex pair, so just save it and return - dont transmit anything yet
           setLastChar(data.char)
           return;
         }
@@ -68,9 +71,9 @@ function App() {
     return (
       <div className="grid-item" onClick={handleClick}>{displayChar}</div>
     )
-
   }
 
+  // the actual Z-Chat App is rendered here !
   return (
     <div className="App">
       <header className="App-header">

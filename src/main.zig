@@ -1,24 +1,46 @@
 const std = @import("std");
+const httpz = @import("httpz");
+const State = @import("state.zig");
+
+const base_path = "ui/build"; // set this to the base path where the findal React app is hosted
 
 pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    std.debug.print("Starting Z-Chat server\n", .{});
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+    var ctx = State.init(allocator);
+    defer ctx.deinit();
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+    var server = try httpz.ServerCtx(*State, *State).init(allocator, .{ .port = 3000 }, &ctx);
+    server.notFound(fileServer);
 
-    try bw.flush(); // don't forget to flush!
+    var router = server.router();
+    router.get("/increment", State.increment);
+    router.get("/", indexHTML);
+    router.get("/events", State.events);
+    router.post("/chat", State.chat);
+
+    return server.listen();
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+// note that the error handler return `void` and not `!void`
+fn fileServer(ctx: *State, req: *httpz.Request, res: *httpz.Response) !void {
+    _ = ctx;
+    return serveFile(res, req.url.path);
+}
+
+fn indexHTML(ctx: *State, req: *httpz.Request, res: *httpz.Response) !void {
+    _ = req;
+    _ = ctx;
+    return serveFile(res, "/index.html");
+}
+
+fn serveFile(res: *httpz.Response, path: []const u8) !void {
+    std.debug.print("GET {s}\n", .{path});
+
+    var new_path = try std.mem.concat(res.arena, u8, &[_][]const u8{ base_path, path });
+    var index_file = try std.fs.cwd().openFile(new_path, .{});
+    defer index_file.close();
+    res.body = try index_file.readToEndAlloc(res.arena, 460000); // being just big enough to hold the 456k map file
 }

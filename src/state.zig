@@ -79,7 +79,7 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
     // on initial connect, send them a copy of the document
     try self.writeDocument(res);
 
-    // aquire a lock on the event_mutiex
+    // aquire a lock on the event_mutex
     self.event_mutex.lock();
     defer self.event_mutex.unlock();
 
@@ -97,7 +97,7 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
             std.debug.print("got an error waiting on the condition {any}!\n", .{err});
             return err;
         };
-        //try if we get here, it means that the event_condition was signalled, so we can send the updated document now
+        // if we get here, it means that the event_condition was signalled, so we can send the updated document now
         try self.writeDocument(res);
     }
 }

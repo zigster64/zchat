@@ -16,6 +16,18 @@ Which will print "Hi"
 
 What could be easier ?
 
+# What Really ?
+
+Yes !
+
+The actual point of this repo is to do some relatively cool `net-web-dev` things in Zig, with very little code.
+
+- Doing realtime updates from a standard HTTP/1 GET request, using Zig (without websockets)
+- Do long running http handlers 
+- How to use a global state object in a Zig HTTP server, that gets referenced from http handlers
+- How to sleep/block long running threads, and signal them using std.Thread.Conditon.broadcast() to make realtime updates as the state changes
+- How to use the new package manager with `build.zig.zon`, in this case referencing a dev branch of a repo as a dependency
+
 # Code 
 
 This code is split into 2 components :

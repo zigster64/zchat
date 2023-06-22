@@ -76,7 +76,7 @@ It shows complete frames, including the keepalive pings.
 
 Nice !
 
-# SHow me the FrontEnd code
+# Show me the FrontEnd code
 
 The entire App is encoded in the `App.js` file - with a bit of CSS pretty ups in the `App.css` file.
 

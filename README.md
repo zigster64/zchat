@@ -115,15 +115,13 @@ which is an endpoint of mime type `text/event-stream`
 
 This is a text protocol that packages messages in the format
 ```
-event: name of event
+: comment
 data: Some UTF-8 encoded data.
-Can be anything - can be TEXT, can be JSON 
-can be protobuf encoded if you want !
-Finish up with 2 blank lines to denote end of message.
-
+data: Can be anything - can be TEXT, can be JSON 
+data: can be protobuf encoded if you want !
+data: Finish up with a blank line to denote end of message.
  
 ```
-Note the 2x blank lines to denote the end of the message frame (just like all the other HTTP protocols)
 
 The connection is held open at the end of the message, and the client is expected to wait around till the next 
 message arrives.

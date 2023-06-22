@@ -23,7 +23,6 @@ fn addBytes(self: *Self, bytes: []const u8) !void {
     self.document_mutex.lock();
     defer self.document_mutex.unlock();
     try self.document.appendSlice(bytes);
-    std.debug.print("The document is now '{s}'\n", .{self.document.items});
 
     // signal the document as updated
     {
@@ -94,12 +93,11 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
                 try res.stream.writeAll(": keep-alive ping\n\n");
                 continue;
             }
-                    // some other error - abort !
+            // some other error - abort !
             std.debug.print("got an error waiting on the condition {any}!\n", .{err});
             return err;
         };
         //try if we get here, it means that the event_condition was signalled, so we can send the updated document now
-        std.debug.print("got an update signal !\n", .{});
         try self.writeDocument(res);
     }
 }

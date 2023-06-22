@@ -62,8 +62,6 @@ function App() {
         if (!response.ok) {
           throw new Error('POST chat request failed');
         }
-        const res_data = await response.json();
-        console.log('Response data:', res_data);
       } catch (error) {
         console.error('Error:', error.message);
       }

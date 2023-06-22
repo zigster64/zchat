@@ -35,6 +35,7 @@ fn addBytes(self: *Self, bytes: []const u8) !void {
 
 // chat handler for receiving chat update, which has a JSON encoded object with the type of new thing to be added to the document
 pub fn chat(self: *Self, req: *httpz.Request, res: *httpz.Response) !void {
+    _ = res;
     if (try req.jsonObject()) |v| {
         if (v.get("cuniform")) |cuniform| {
             // std.debug.print("got cuniform 0x{s} {s}\n", .{ std.fmt.fmtSliceHexUpper(cuniform.string), cuniform.string });
@@ -52,7 +53,6 @@ pub fn chat(self: *Self, req: *httpz.Request, res: *httpz.Response) !void {
             try self.addBytes(emoji.string);
         }
     }
-    res.body = "thanks";
 }
 
 pub fn writeDocument(self: *Self, res: *httpz.Response) !void {
@@ -69,9 +69,8 @@ pub fn writeDocument(self: *Self, res: *httpz.Response) !void {
     }
 }
 
-pub fn events(self: *Self, req: *httpz.Request, res: *httpz.Response) !void {
-    _ = req;
-
+pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
+    _ = _req;
     const keepalive_time = std.time.ns_per_s * 5;
 
     // Set us up an event stream header, and send it to the client before doing anything
@@ -95,6 +94,9 @@ pub fn events(self: *Self, req: *httpz.Request, res: *httpz.Response) !void {
                 try res.stream.writeAll(": keep-alive ping\n\n");
                 continue;
             }
+                    // some other error - abort !
+            std.debug.print("got an error waiting on the condition {any}!\n", .{err});
+            return err;
         };
         //try if we get here, it means that the event_condition was signalled, so we can send the updated document now
         std.debug.print("got an update signal !\n", .{});

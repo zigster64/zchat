@@ -25,7 +25,7 @@ fn addBytes(self: *Self, bytes: []const u8) !void {
         defer self.document_mutex.unlock();
         if (bytes.len == 1 and bytes[0] == 0) {
             // clear the document on receiving the dreaded 00
-            try self.document.resize(0);
+            self.document.clearAndFree();
         } else {
             try self.document.appendSlice(bytes);
         }

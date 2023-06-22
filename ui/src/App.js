@@ -6,24 +6,19 @@ import { useState } from 'react';
 
 function App() {
   const [lastChar, setLastChar] = useState(null);
+  const [document, setDocument] = useState("");
 
   const hexButtons = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
   const cuniformButtons = ['𒁹', '𒀸', '𒀹', '𒀺', '𒁇', '𒀀', '𒀅', '𒂿'];
   const emojiButtons = ['😀', '🤣', '🫠', '🙃'];
 
-  const { lastEvent, _getEventSource, readyState } = useEventSource(
+  const { lastEvent, getEventSource, readyState } = useEventSource(
     'http://localhost:3000/events',
     {
       withCredentials: true,
       events: {
         message: (messageEvent) => {
-          console.log('messageEvent', messageEvent);
-        },
-        update: (updateEvent) => {
-          console.log('updateEvent', updateEvent);
-        },
-        document: (documentEvent) => {
-          console.log('documentEvent: ', documentEvent);
+          setDocument(messageEvent.data);
         },
       },
     }
@@ -91,9 +86,8 @@ function App() {
           ))}
         </div>
         <p className="hint">Communicate the easy and natural way using only Hexidecimal and Cuniform</p>
+        <p>{document}</p>
       </header>
-      <p>{JSON.stringify(lastEvent)}</p>
-      <p>{JSON.stringify(readyState)}</p>
     </div>
   );
 }

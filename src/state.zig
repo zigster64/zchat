@@ -23,7 +23,12 @@ fn addBytes(self: *Self, bytes: []const u8) !void {
     {
         self.document_mutex.lock();
         defer self.document_mutex.unlock();
-        try self.document.appendSlice(bytes);
+        if (bytes.len == 1 and bytes[0] == 0) {
+            // clear the document on receiving the dreaded 00
+            try self.document.resize(0);
+        } else {
+            try self.document.appendSlice(bytes);
+        }
     }
 
     // signal the document as updated
@@ -60,14 +65,16 @@ pub fn writeDocument(self: *Self, res: *httpz.Response) !void {
     self.document_mutex.lock();
     defer self.document_mutex.unlock();
 
-    try res.stream.writeAll("event: document\n");
+    // try res.stream.writeAll("event: document\n");
+
     // split the document into lines
     var lines = std.mem.tokenizeAny(u8, self.document.items, "\n");
     while (lines.next()) |line| {
         try res.stream.writeAll("data: ");
         try res.stream.writeAll(line);
-        try res.stream.writeAll("\n\n");
+        try res.stream.writeAll("\n");
     }
+    try res.stream.writeAll("\n");
 }
 
 pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {

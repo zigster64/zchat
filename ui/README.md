@@ -15,6 +15,8 @@ Click on any Cuniform (or Emoji) to transmit the data for that code.
 
 Click on any PAIR of Hexidecimal values to combine them and transmit the character for that combined code.
 
+Click 00 to reset the chat, and start a fresh new chat.
+
 for example - if you Click 4 8 6 9
 
 This will transmit 2 letters - 48 (H) and 69 (i)

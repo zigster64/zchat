@@ -36,6 +36,9 @@ This just waits for incoming messages from the server, and then acts on them as 
 
 At the server end, it runs a standard web server based on https://github.com/karlseguin/http.zig
 
+(NOTE - actually, this needs some hacks to get it working with event-stream, so its using this branch here
+https://github.com/zigster64/http.zig - branch "event-source")
+
 Basic HTTP GET requests are used to serve up the react app
 
 Basic HTTP POST requests are used to "send messages" or other updates

@@ -49,7 +49,6 @@ function App() {
         }
       }
       setLastChar(null)
-      console.log(data, payload)
       try {
         const response = await fetch('http://localhost:3000/chat', {
           method: 'POST',

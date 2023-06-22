@@ -22,4 +22,45 @@ Which will print "Hi"
 
 What could be easier ?
 
+# How to build
+
+If you want to go all in on Zig, then install `bun`  `http://bun.sh`
+
+```
+# curl -fsSL https://bun.sh/install | bash
+```
+
+Then in this directory
+
+```
+bun i
+bun make build
+```
+
+Thats it ! that will pull in all the Javascript dependencies, and then build a bundled React app ready for production.
+
+Have a look in the `build` directory to see the build artifacts.
+
+# How to run
+
+Once the frontend is built, you can then run the Z-Chat server in the main directory
+
+```
+zig build run
+```
+
+This builds and runs the Z-Chat server.
+
+(NOTE - requires AT LEAST Zig version 0.11.0-dev.3739+939e4d81e ... because so much has changed since last week !)
+
+Once the Z-Chat server is running, then fire up some browsers and point to 
+http://localhost:3000
+
+# SHow me the FrontEnd code
+
+The entire App is encoded in the `App.js` file - with a bit of CSS pretty ups in the `App.css` file.
+
+Its < 100 lines of react code ... if you are not into Frontend code, thats cool, just read it anyway to see how it works.
+
+
 

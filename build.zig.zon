@@ -3,10 +3,10 @@
     .version = "0.1.0",
 
     .dependencies = .{
-      // zigster64 port of karlsequin http lib
-      .http = .{
-        .url = "https://github.com/zigster64/http.zig/archive/refs/heads/master.tar.gz",
-        .hash = "1220e2b9f62b612273e4cced2d63eeef62a3d3949ce583d87f6a834648454bc038b1",
-      },
+        // zigster64 port of karlsequin http lib
+        .http = .{
+            .url = "https://github.com/zigster64/http.zig/archive/refs/heads/event-source.tar.gz",
+            .hash = "122023c2ee6350a11aed3ef30107d3aff1bfeff77a967d3d3d8e06b6a4f7943e3729",
+        },
     },
 }

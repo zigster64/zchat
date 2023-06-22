@@ -5,7 +5,7 @@ const State = @import("state.zig");
 const base_path = "ui/build"; // set this to the base path where the findal React app is hosted
 
 pub fn main() !void {
-    std.debug.print("Starting Z-Chat server\n", .{});
+    std.debug.print("Starting Z-Chat server\ngo to http://localhost:3000\n", .{});
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
 
@@ -16,7 +16,6 @@ pub fn main() !void {
     server.notFound(fileServer);
 
     var router = server.router();
-    router.get("/increment", State.increment);
     router.get("/", indexHTML);
     router.get("/events", State.events);
     router.post("/chat", State.chat);

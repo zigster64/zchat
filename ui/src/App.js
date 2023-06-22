@@ -17,10 +17,10 @@ function App() {
       withCredentials: true,
       events: {
         message: (messageEvent) => {
-          console.log('This has type "message": ', messageEvent);
+          console.log('messageEvent: ', messageEvent);
         },
         update: (messageEvent) => {
-          console.log('This has type "update": ', messageEvent);
+          console.log('updateEvent: ', messageEvent);
         },
       },
     }
@@ -49,13 +49,14 @@ function App() {
         }
       }
       setLastChar(null)
+      console.log(data, payload)
       try {
         const response = await fetch('http://localhost:3000/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ payload }),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {

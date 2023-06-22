@@ -20,9 +20,11 @@ pub fn deinit(self: *Self) void {
 
 // addBytes will append new bytes to the document, then broadcast an update to all the event streams
 fn addBytes(self: *Self, bytes: []const u8) !void {
-    self.document_mutex.lock();
-    defer self.document_mutex.unlock();
-    try self.document.appendSlice(bytes);
+    {
+        self.document_mutex.lock();
+        defer self.document_mutex.unlock();
+        try self.document.appendSlice(bytes);
+    }
 
     // signal the document as updated
     {

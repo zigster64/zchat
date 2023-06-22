@@ -11,11 +11,17 @@ function App() {
   const cuniformButtons = ['𒁹', '𒀸', '𒀹', '𒀺', '𒁇', '𒀀', '𒀅', '𒂿'];
   const emojiButtons = ['😀', '🤣', '🫠', '🙃'];
 
-  const { lastEvent, getEventSource, readyState } = useEventSource(
+  const { lastEvent, _getEventSource, readyState } = useEventSource(
     'http://localhost:3000/events',
     {
       withCredentials: true,
       events: {
+        message: (messageEvent) => {
+          console.log('messageEvent', messageEvent);
+        },
+        update: (updateEvent) => {
+          console.log('updateEvent', updateEvent);
+        },
         document: (documentEvent) => {
           console.log('documentEvent: ', documentEvent);
         },
@@ -86,6 +92,8 @@ function App() {
         </div>
         <p className="hint">Communicate the easy and natural way using only Hexidecimal and Cuniform</p>
       </header>
+      <p>{JSON.stringify(lastEvent)}</p>
+      <p>{JSON.stringify(readyState)}</p>
     </div>
   );
 }

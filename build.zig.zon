@@ -6,7 +6,7 @@
         // zigster64 port of karlsequin http lib
         .http = .{
             .url = "https://github.com/zigster64/http.zig/archive/refs/heads/event-source.tar.gz",
-            .hash = "122023c2ee6350a11aed3ef30107d3aff1bfeff77a967d3d3d8e06b6a4f7943e3729",
+            .hash = "122097ad3fb67d3428547166681967c5077f67ee52756ef2c84ef2e0ef134af999b7",
         },
     },
 }

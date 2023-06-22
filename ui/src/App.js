@@ -16,11 +16,8 @@ function App() {
     {
       withCredentials: true,
       events: {
-        message: (messageEvent) => {
-          console.log('messageEvent: ', messageEvent);
-        },
-        update: (messageEvent) => {
-          console.log('updateEvent: ', messageEvent);
+        document: (documentEvent) => {
+          console.log('documentEvent: ', documentEvent);
         },
       },
     }

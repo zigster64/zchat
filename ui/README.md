@@ -56,6 +56,24 @@ This builds and runs the Z-Chat server.
 Once the Z-Chat server is running, then fire up some browsers and point to 
 http://localhost:3000
 
+# Debugging
+
+Under Chrome - open up dev tools, and have a look at the network tab.
+
+Notice there is an "event" endpoint that gets hit.
+
+Click through on that, and you will notice something different - its not a normal REST call, its an event-stream.
+
+The request stays open, and you can see individual messages being appended to the event-stream, similar to the way that chrome shows Websocket packets.
+
+Nice !
+
+Under Safari - its a bit different. Open the "sources" tab, and see the "event" source.
+
+It shows complete frames, including the keepalive pings.
+
+Nice !
+
 # SHow me the FrontEnd code
 
 The entire App is encoded in the `App.js` file - with a bit of CSS pretty ups in the `App.css` file.

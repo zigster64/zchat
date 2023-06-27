@@ -61,7 +61,7 @@ pub fn chat(self: *Self, req: *httpz.Request, res: *httpz.Response) !void {
     }
 }
 
-pub fn writeDocument(self: *Self, res: *httpz.Response) !void {
+pub fn writeDocument(self: *Self, stream: std.net.Stream) !void {
     self.document_mutex.lock();
     defer self.document_mutex.unlock();
 
@@ -70,11 +70,11 @@ pub fn writeDocument(self: *Self, res: *httpz.Response) !void {
     // split the document into lines
     var lines = std.mem.tokenizeAny(u8, self.document.items, "\n");
     while (lines.next()) |line| {
-        try res.stream.writeAll("data: ");
-        try res.stream.writeAll(line);
-        try res.stream.writeAll("\n");
+        try stream.writeAll("data: ");
+        try stream.writeAll(line);
+        try stream.writeAll("\n");
     }
-    try res.stream.writeAll("\n");
+    try stream.writeAll("\n");
 }
 
 pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
@@ -82,11 +82,10 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
     const keepalive_time = std.time.ns_per_s * 5;
 
     // Set us up an event stream header, and send it to the client before doing anything
-    res.useEventStream();
-    try res.write();
+    var stream = try res.startEventStream();
 
     // on initial connect, send them a copy of the document
-    try self.writeDocument(res);
+    try self.writeDocument(stream);
 
     // aquire a lock on the event_mutex
     self.event_mutex.lock();
@@ -99,7 +98,7 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
         // on return, this re-aquires the mutex
         self.event_condition.timedWait(&self.event_mutex, keepalive_time) catch |err| {
             if (err == error.Timeout) {
-                try res.stream.writeAll(": keep-alive ping\n\n");
+                try stream.writeAll(": keep-alive ping\n\n");
                 continue;
             }
             // some other error - abort !
@@ -107,6 +106,6 @@ pub fn events(self: *Self, _req: *httpz.Request, res: *httpz.Response) !void {
             return err;
         };
         // if we get here, it means that the event_condition was signalled, so we can send the updated document now
-        try self.writeDocument(res);
+        try self.writeDocument(stream);
     }
 }
